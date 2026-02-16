@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 # CONFIGURATION
 # ═══════════════════════════════════════════════════════════
 
-API_BASE_URL = os.getenv("API_URL", "http://localhost:8000")
+API_BASE_URL = "https://cinematch-movie-recommender-production.up.railway.app" 
 TMDB_API_KEY = "22fa2d860d6e3ddbc070f84dff992094"
 TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w500"
 
@@ -275,21 +275,24 @@ def get_movie_poster(title: str) -> str:
     
     return f"https://via.placeholder.com/500x750/1a1a1a/d4af37?text={title[:20].replace(' ', '+')}"
 
-@st.cache_data(ttl=300, show_spinner=False)  # Cache for 5 minutes
-def get_popular_movies_cached(n: int = 20) -> List[Dict]:
-    """Get popular movies - cached to avoid repeated API calls"""
+def get_popular_movies(n: int = 20) -> List[Dict]:
+    """Get popular movies for onboarding"""
     try:
+        url = f"{API_BASE_URL}/recommend"
+        st.write(f"DEBUG: Calling {url}")  # Debug line
         response = requests.get(
-            f"{API_BASE_URL}/recommend",
+            url,
             params={"user_id": 999999999, "n": n},
             timeout=10
         )
+        st.write(f"DEBUG: Status code: {response.status_code}")  # Debug line
         if response.status_code == 200:
-            return response.json().get("recommendations", [])
-    except:
-        pass
+            data = response.json()
+            st.write(f"DEBUG: Got {len(data.get('recommendations', []))} movies")  # Debug line
+            return data.get("recommendations", [])
+    except Exception as e:
+        st.error(f"Error loading movies: {str(e)}")
     return []
-
 def submit_rating(user_id: int, movie_id: int, rating: float) -> bool:
     """Submit rating to API"""
     try:
