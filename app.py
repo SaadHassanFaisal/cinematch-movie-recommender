@@ -15,6 +15,17 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Add CORS middleware to allow Streamlit to connect
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # ────────────────────────────────────────────────
 # Configuration & Path Setup
 # ────────────────────────────────────────────────
