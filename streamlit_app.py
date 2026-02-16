@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 # CONFIGURATION
 # ═══════════════════════════════════════════════════════════
 
-API_BASE_URL = "http://localhost:8000"
+API_BASE_URL = os.getenv("API_URL", "http://localhost:8000")
 TMDB_API_KEY = "22fa2d860d6e3ddbc070f84dff992094"
 TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/w500"
 
