@@ -19,12 +19,13 @@ app = FastAPI(
 # Configuration & Path Setup
 # ────────────────────────────────────────────────
 # Use environment variable or fallback to default
-ROOT_DIR = os.getenv("MODEL_PATH", r"D:\Machine Learning Projects\10. Movie Recommender")
+# ════════════════════════════════════════════════
+# CONFIGURATION & PATH SETUP
+# ════════════════════════════════════════════════
+# Use environment variable or fallback to current directory
+ROOT_DIR = os.getenv("MODEL_PATH", os.path.dirname(os.path.abspath(__file__)))
 
-# Validate that directory exists
-if not os.path.exists(ROOT_DIR):
-    raise RuntimeError(f"Model directory not found: {ROOT_DIR}")
-
+# NOTE: Skip validation in Docker - files are in same directory as app.py
 # ────────────────────────────────────────────────
 # Load Data & Model Artifacts
 # ────────────────────────────────────────────────
