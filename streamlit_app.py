@@ -465,7 +465,7 @@ def render_onboarding_page():
     st.markdown("<hr>", unsafe_allow_html=True)
     
     # Load popular movies (cached)
-    popular_movies = get_popular_movies_cached(20)
+    popular_movies = get_popular_movies(20)
     
     if not popular_movies:
         st.error("⚠️ Unable to load movies. Please ensure FastAPI is running.")
