@@ -279,16 +279,13 @@ def get_popular_movies(n: int = 20) -> List[Dict]:
     """Get popular movies for onboarding"""
     try:
         url = f"{API_BASE_URL}/recommend"
-        st.write(f"DEBUG: Calling {url}")  # Debug line
         response = requests.get(
             url,
             params={"user_id": 999999999, "n": n},
             timeout=10
         )
-        st.write(f"DEBUG: Status code: {response.status_code}")  # Debug line
         if response.status_code == 200:
             data = response.json()
-            st.write(f"DEBUG: Got {len(data.get('recommendations', []))} movies")  # Debug line
             return data.get("recommendations", [])
     except Exception as e:
         st.error(f"Error loading movies: {str(e)}")
@@ -465,7 +462,8 @@ def render_onboarding_page():
     st.markdown("<hr>", unsafe_allow_html=True)
     
     # Load popular movies (cached)
-    popular_movies = get_popular_movies(20)
+    with st.spinner("Loading film selection..."):
+        popular_movies = get_popular_movies(20)
     
     if not popular_movies:
         st.error("⚠️ Unable to load movies. Please ensure FastAPI is running.")
